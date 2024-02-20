@@ -5,19 +5,23 @@ services:
   app:
     build: .
     image: ${SERVER_IMAGE}
+    restart: always
     container_name: my-app
     ports:
       - ${SERVER_PORT}
-    environment:
-      - ${DATABASE_C}
+    environment: #environment of strapi 
+      - ${DATABASE_C} 
       - ${DATABASE_H}
       - ${DATABASE_P}
       - ${DATABASE_N}
       - ${DATABASE_U}
       - ${DATABASE_P}
       - ${DATABASE_SS}
+    depends_on:
+      - db
   db:
     image: ${DATABASE_I}
+    restart: always
     container_name: my-db
     ports:
       - ${DB_PORTS}
