@@ -17,7 +17,7 @@ services:
       - ${DATABASE_P}
       - ${DATABASE_SS}
   db:
-    image: postgres:latest
+    image: ${DATABASE_I}
     container_name: my-db
     ports:
       - ${DB_PORTS}
