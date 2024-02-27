@@ -781,6 +781,231 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
+export interface ApiClassroomClassroom extends Schema.CollectionType {
+  collectionName: 'classrooms';
+  info: {
+    singularName: 'classroom';
+    pluralName: 'classrooms';
+    displayName: 'Classroom';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    students: Attribute.Relation<
+      'api::classroom.classroom',
+      'manyToMany',
+      'api::student.student'
+    >;
+    teachers: Attribute.Relation<
+      'api::classroom.classroom',
+      'manyToMany',
+      'api::teacher.teacher'
+    >;
+    subjects: Attribute.Relation<
+      'api::classroom.classroom',
+      'manyToMany',
+      'api::subject.subject'
+    >;
+    ClassName: Attribute.String & Attribute.Required;
+    rooms: Attribute.Relation<
+      'api::classroom.classroom',
+      'manyToMany',
+      'api::room.room'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::classroom.classroom',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::classroom.classroom',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiRoomRoom extends Schema.CollectionType {
+  collectionName: 'rooms';
+  info: {
+    singularName: 'room';
+    pluralName: 'rooms';
+    displayName: 'Room';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Room: Attribute.String & Attribute.Required;
+    subjects: Attribute.Relation<
+      'api::room.room',
+      'manyToMany',
+      'api::subject.subject'
+    >;
+    classrooms: Attribute.Relation<
+      'api::room.room',
+      'manyToMany',
+      'api::classroom.classroom'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::room.room', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::room.room', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiStudentStudent extends Schema.CollectionType {
+  collectionName: 'students';
+  info: {
+    singularName: 'student';
+    pluralName: 'students';
+    displayName: 'Student';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Name: Attribute.String & Attribute.Required;
+    PhoneNumber: Attribute.BigInteger;
+    classrooms: Attribute.Relation<
+      'api::student.student',
+      'manyToMany',
+      'api::classroom.classroom'
+    >;
+    Confirm: Attribute.Boolean;
+    address: Attribute.Text;
+    subjects: Attribute.Relation<
+      'api::student.student',
+      'oneToMany',
+      'api::subject.subject'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::student.student',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::student.student',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSubjectSubject extends Schema.CollectionType {
+  collectionName: 'subjects';
+  info: {
+    singularName: 'subject';
+    pluralName: 'subjects';
+    displayName: 'Subject';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Name: Attribute.String;
+    Code: Attribute.String;
+    credit: Attribute.String;
+    teacher: Attribute.Relation<
+      'api::subject.subject',
+      'manyToOne',
+      'api::teacher.teacher'
+    >;
+    student: Attribute.Relation<
+      'api::subject.subject',
+      'manyToOne',
+      'api::student.student'
+    >;
+    classrooms: Attribute.Relation<
+      'api::subject.subject',
+      'manyToMany',
+      'api::classroom.classroom'
+    >;
+    rooms: Attribute.Relation<
+      'api::subject.subject',
+      'manyToMany',
+      'api::room.room'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::subject.subject',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::subject.subject',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiTeacherTeacher extends Schema.CollectionType {
+  collectionName: 'teachers';
+  info: {
+    singularName: 'teacher';
+    pluralName: 'teachers';
+    displayName: 'Teacher';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Name: Attribute.String & Attribute.Required;
+    Email: Attribute.Email & Attribute.Required;
+    PhoneNumber: Attribute.BigInteger;
+    address: Attribute.Text;
+    subjects: Attribute.Relation<
+      'api::teacher.teacher',
+      'oneToMany',
+      'api::subject.subject'
+    >;
+    classrooms: Attribute.Relation<
+      'api::teacher.teacher',
+      'manyToMany',
+      'api::classroom.classroom'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::teacher.teacher',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::teacher.teacher',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -799,6 +1024,11 @@ declare module '@strapi/types' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::classroom.classroom': ApiClassroomClassroom;
+      'api::room.room': ApiRoomRoom;
+      'api::student.student': ApiStudentStudent;
+      'api::subject.subject': ApiSubjectSubject;
+      'api::teacher.teacher': ApiTeacherTeacher;
     }
   }
 }
