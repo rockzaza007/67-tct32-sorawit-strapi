@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
   db:
-    image: ${DATABASE_I}
+    image: postgres:latest
     restart: always
     container_name: my-db
     ports:
