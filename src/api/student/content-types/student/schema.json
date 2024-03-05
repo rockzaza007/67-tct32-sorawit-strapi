@@ -17,9 +17,11 @@
       "required": true
     },
     "PhoneNumber": {
-      "type": "string",
+      "type": "text",
       "max": "10",
-      "min": "10"
+      "min": "10",
+      "maxLength": 10,
+      "minLength": 10
     },
     "Confirm": {
       "type": "boolean"

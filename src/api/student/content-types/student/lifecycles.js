@@ -1,49 +1,36 @@
 const crypto = require('crypto');
-const md5 = require('md5');
 
 const algorithm = 'aes-256-cbc';
-console.log('process.env.SECRET_KEY', process.env.SECRET_KEY);
 const key = Buffer.from(process.env.SECRET_KEY); // Should be a 32-byte key for aes-256
 const iv = process.env.SECRET_KEY_IV; // Should be a 16-byte IV for aes-256-cbc
 
-
 const encryptPhoneNumber = (phoneNumber) => {
-  const cipher = crypto.createCipheriv(algorithm, key, iv);
-  let encryptedPhoneNumber = cipher.update(phoneNumber, 'utf8', 'hex');
-  encryptedPhoneNumber += cipher.final('hex');
- // Pad the encrypted phone number to ensure it's at least 128 characters long
-  encryptedPhoneNumber = padToLength(encryptedPhoneNumber, 128);
-
+  let encryptedPhoneNumber = '';
+  // Split the phone number into pairs of two characters
+  for (let i = 0; i < phoneNumber.length; i += 2) {
+    const chunk = phoneNumber.slice(i, i + 2);
+    // Encrypt each chunk and append to the result
+    const cipher = crypto.createCipheriv(algorithm, key, iv);
+    let encryptedChunk = cipher.update(chunk, 'utf8', 'hex');
+    encryptedChunk += cipher.final('hex');
+    encryptedPhoneNumber += encryptedChunk;
+  }
   return encryptedPhoneNumber;
 };
 
 const decryptPhoneNumber = (encryptedPhoneNumber) => {
-  encryptedPhoneNumber = removePadding(encryptedPhoneNumber);
-  const decipher = crypto.createDecipheriv(algorithm, key, iv);
-  let phoneNumber = decipher.update(encryptedPhoneNumber, 'hex', 'utf8');
-  phoneNumber += decipher.final('utf8');
-
-  return phoneNumber;
-};
-
-// Custom padding function to ensure fixed length
-const padToLength = (string, length) => {
-  if (string.length >= length) return string; // No need to pad
-  const paddingLength = length - string.length;
-  const padding = crypto.randomBytes(paddingLength).toString('hex');
-  return string+padding;
-};
-
-// Custom function to remove padding
-const removePadding = (string) => {
-  const paddingLength = 32; // Number of characters to remove
-  if (string.length > paddingLength) {
-    return string.slice(0, paddingLength); // Remove trailing characters
-  } else {
-    return string; // No padding to remove
+  let decryptedPhoneNumber = '';
+  // Split the encrypted phone number into pairs of encrypted chunks
+  for (let i = 0; i < encryptedPhoneNumber.length; i += 32) { // Assuming each chunk is 32 characters long
+    const encryptedChunk = encryptedPhoneNumber.slice(i, i + 32); // Assuming each chunk is 32 characters long
+    // Decrypt each chunk and append to the result
+    const decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decryptedChunk = decipher.update(encryptedChunk, 'hex', 'utf8');
+    decryptedChunk += decipher.final('utf8');
+    decryptedPhoneNumber += decryptedChunk;
   }
+  return decryptedPhoneNumber;
 };
-
 
 module.exports = {
   async beforeCreate(event) {

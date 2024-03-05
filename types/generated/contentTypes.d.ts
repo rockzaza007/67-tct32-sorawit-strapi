@@ -878,14 +878,18 @@ export interface ApiStudentStudent extends Schema.CollectionType {
   };
   attributes: {
     Name: Attribute.String & Attribute.Required;
-    PhoneNumber: Attribute.String &
+    PhoneNumber: Attribute.Text &
       Attribute.SetMinMax<
         {
           min: '10';
           max: '10';
         },
         string
-      >;
+      > &
+      Attribute.SetMinMaxLength<{
+        minLength: 10;
+        maxLength: 10;
+      }>;
     Confirm: Attribute.Boolean;
     address: Attribute.Text;
     subjects: Attribute.Relation<
