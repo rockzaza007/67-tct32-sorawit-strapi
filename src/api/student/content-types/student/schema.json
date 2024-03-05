@@ -17,13 +17,9 @@
       "required": true
     },
     "PhoneNumber": {
-      "type": "biginteger"
-    },
-    "classrooms": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::classroom.classroom",
-      "mappedBy": "students"
+      "type": "string",
+      "max": "10",
+      "min": "10"
     },
     "Confirm": {
       "type": "boolean"
@@ -36,6 +32,12 @@
       "relation": "oneToMany",
       "target": "api::subject.subject",
       "mappedBy": "student"
+    },
+    "classrooms": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::classroom.classroom",
+      "mappedBy": "students"
     }
   }
 }

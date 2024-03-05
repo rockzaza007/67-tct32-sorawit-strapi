@@ -12,6 +12,16 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "ClassName": {
+      "type": "string",
+      "required": true
+    },
+    "subjects": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::subject.subject",
+      "inversedBy": "classrooms"
+    },
     "students": {
       "type": "relation",
       "relation": "manyToMany",
@@ -23,16 +33,6 @@
       "relation": "manyToMany",
       "target": "api::teacher.teacher",
       "inversedBy": "classrooms"
-    },
-    "subjects": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::subject.subject",
-      "inversedBy": "classrooms"
-    },
-    "ClassName": {
-      "type": "string",
-      "required": true
     },
     "rooms": {
       "type": "relation",

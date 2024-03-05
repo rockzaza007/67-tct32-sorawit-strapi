@@ -33,16 +33,16 @@
       "target": "api::student.student",
       "inversedBy": "subjects"
     },
-    "classrooms": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::classroom.classroom",
-      "mappedBy": "subjects"
-    },
     "rooms": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::room.room",
+      "mappedBy": "subjects"
+    },
+    "classrooms": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::classroom.classroom",
       "mappedBy": "subjects"
     }
   }

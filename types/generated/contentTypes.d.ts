@@ -793,6 +793,12 @@ export interface ApiClassroomClassroom extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
+    ClassName: Attribute.String & Attribute.Required;
+    subjects: Attribute.Relation<
+      'api::classroom.classroom',
+      'manyToMany',
+      'api::subject.subject'
+    >;
     students: Attribute.Relation<
       'api::classroom.classroom',
       'manyToMany',
@@ -803,12 +809,6 @@ export interface ApiClassroomClassroom extends Schema.CollectionType {
       'manyToMany',
       'api::teacher.teacher'
     >;
-    subjects: Attribute.Relation<
-      'api::classroom.classroom',
-      'manyToMany',
-      'api::subject.subject'
-    >;
-    ClassName: Attribute.String & Attribute.Required;
     rooms: Attribute.Relation<
       'api::classroom.classroom',
       'manyToMany',
@@ -878,18 +878,25 @@ export interface ApiStudentStudent extends Schema.CollectionType {
   };
   attributes: {
     Name: Attribute.String & Attribute.Required;
-    PhoneNumber: Attribute.BigInteger;
-    classrooms: Attribute.Relation<
-      'api::student.student',
-      'manyToMany',
-      'api::classroom.classroom'
-    >;
+    PhoneNumber: Attribute.String &
+      Attribute.SetMinMax<
+        {
+          min: '10';
+          max: '10';
+        },
+        string
+      >;
     Confirm: Attribute.Boolean;
     address: Attribute.Text;
     subjects: Attribute.Relation<
       'api::student.student',
       'oneToMany',
       'api::subject.subject'
+    >;
+    classrooms: Attribute.Relation<
+      'api::student.student',
+      'manyToMany',
+      'api::classroom.classroom'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -934,15 +941,15 @@ export interface ApiSubjectSubject extends Schema.CollectionType {
       'manyToOne',
       'api::student.student'
     >;
-    classrooms: Attribute.Relation<
-      'api::subject.subject',
-      'manyToMany',
-      'api::classroom.classroom'
-    >;
     rooms: Attribute.Relation<
       'api::subject.subject',
       'manyToMany',
       'api::room.room'
+    >;
+    classrooms: Attribute.Relation<
+      'api::subject.subject',
+      'manyToMany',
+      'api::classroom.classroom'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
