@@ -29,4 +29,5 @@ services:
       - ${PASSWORD}
       - ${USER}
       - ${DB}
-
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
