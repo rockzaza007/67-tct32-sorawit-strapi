@@ -11,8 +11,10 @@ services:
       - ${SERVER_PORT}
     environment: #environment of strapi 
       - ${DATABASE_C} 
-      - ${DATABASE_H}
-      - ${DATABASE_P}
+      # - ${DATABASE_H}
+      - DATABASE_HOST=db
+      # - ${DATABASE_P}
+      - DATABASE_PORT=5432 
       - ${DATABASE_N}
       - ${DATABASE_U}
       - ${DATABASE_P}
@@ -23,8 +25,8 @@ services:
     image: postgres:latest
     restart: always
     container_name: my-db
-    ports:
-      - ${DB_PORTS}
+    # ports:
+    #   - ${DB_PORTS}
     environment:
       - ${PASSWORD}
       - ${USER}
