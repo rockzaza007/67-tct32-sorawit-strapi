@@ -25,11 +25,11 @@ services:
     image: postgres:latest
     restart: always
     container_name: my-db
-    # ports:
-    #   - ${DB_PORTS}
+    ports:
+      - ${DB_PORTS}
     environment:
       - ${PASSWORD}
       - ${USER}
       - ${DB}
-    #volumes:
-     # - ./database/data:/var/lib/postgresql/data
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
