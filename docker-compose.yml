@@ -1,6 +1,12 @@
 #Using .env file
 version: '3'
 
+networks:
+  my-network:
+    driver: bridge
+  my-caddy:
+    external: true
+
 services:
   app:
     build: .
@@ -10,18 +16,21 @@ services:
     ports:
       - ${SERVER_PORT}
     environment: #environment of strapi 
-      - ${DATABASE_C} 
-      # - ${DATABASE_H}
-      - DATABASE_HOST=db
-      # - ${DATABASE_P}
-      - DATABASE_PORT=5432 
-      - ${DATABASE_N}
-      - ${DATABASE_U}
-      - ${DATABASE_P}
-      - ${DATABASE_SS}
+      - DATABASE_CLIENT=postgres
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_SSL=false
     depends_on:
       - db
+      - proxy
+    networks:
+      - my-network
+
   db:
+
     image: postgres:latest
     restart: always
     container_name: my-db
@@ -33,3 +42,22 @@ services:
       - ${DB}
     volumes:
       - ./database/data:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  proxy:
+    image: caddy:latest
+    container_name: my-proxy
+    ports:
+      - ${PROXY_PORT_1}
+      - ${PROXY_PORT_2}
+    environment:
+      - EMAIL=user@example.com #change to your email
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      # - ./caddy_data:/data
+      # - ./caddy_config:/config
+    networks:
+      - my-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

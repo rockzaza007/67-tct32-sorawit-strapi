@@ -16,18 +16,25 @@ module.exports = {
   async beforeUpdate(event) {
     console.log('beforeUpdate', event.params.data);
     const phoneNumber = event.params.data.PhoneNumber;
-    event.params.data.PhoneNumber = await encrypt(phoneNumber);
-  },
+    // Check if a phone number exists
+    if (phoneNumber) {
+      event.params.data.PhoneNumber = await encrypt(phoneNumber);
+    } 
+  }, 
   async afterFindMany(event) {
     console.log('afterFindMany', event.result);
     event?.result?.map(async result => {
-      result.PhoneNumber = await decrypt(result.PhoneNumber);
+      if (result.PhoneNumber) {
+        result.PhoneNumber = await decrypt(result.PhoneNumber);
+      }
     })
   },
   async afterFindOne(event) {
     console.log('afterFindOne', event.result);
     if (event.result && event.result.PhoneNumber) {
-      event.result.PhoneNumber = await decrypt(event.result.PhoneNumber);
+      if (event.result.PhoneNumber) {
+        event.result.PhoneNumber = await decrypt(event.result.PhoneNumber);
+      }
     }
   },
 };
